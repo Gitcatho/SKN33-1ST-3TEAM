@@ -18,3 +18,5 @@ __pycache__/
 
 # dotenv 무시 설정
 .dotenv
+
+.claude
