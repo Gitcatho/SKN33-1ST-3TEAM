@@ -10,3 +10,4 @@ requests
 sqlalchemy
 streamlit
 streamlit-folium
+folium streamlit-folium
