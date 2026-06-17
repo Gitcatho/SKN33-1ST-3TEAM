@@ -2,7 +2,19 @@ import streamlit as st
 import mysql.connector
 import pandas as pd
 
-st.set_page_config(page_title="리콜 뉴스", page_icon="📰", layout="wide")
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+html, body, [class*="css"] { font-family: 'Noto Sans KR', sans-serif; }
+[data-testid="stSidebar"] { background: #1B2A4A !important; }
+[data-testid="stSidebarNav"] a { color: rgba(255,255,255,0.8) !important; border-radius: 8px; padding: 0.4rem 0.8rem; }
+[data-testid="stSidebarNav"] a:hover { background: rgba(255,107,53,0.2) !important; color: white !important; }
+[data-testid="stSidebarNav"] a[aria-selected="true"] { background: #FF6B35 !important; color: white !important; font-weight: 700; }
+[data-testid="stSidebar"] span { color: rgba(255,255,255,0.8) !important; }
+div.stButton > button { background-color: #FF6B35 !important; color: white !important; border: none !important; border-radius: 8px !important; font-weight: 600 !important; }
+div.stButton > button:hover { background-color: #e85a25 !important; }
+</style>
+""", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
