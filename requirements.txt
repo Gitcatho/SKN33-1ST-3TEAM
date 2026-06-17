@@ -8,3 +8,6 @@ streamlit-folium
 plotly
 pymysql sqlalchemy pandas
 beautifulsoup4>=4.15.0
+mysql-connector-python>= 9.7.0
+streamlit
+pandas-stubs
