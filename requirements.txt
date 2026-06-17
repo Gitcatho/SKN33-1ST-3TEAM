@@ -1,5 +1,12 @@
 beautifulsoup4>=4.15.0
-streamlit>=1.40.0
-pandas>=2.2.0
-SQLAlchemy>=2.0.0
-PyMySQL>=1.1.0
+folium
+mysql-connector-python>=9.7.0
+pandas
+pandas-stubs
+plotly
+pymysql
+python-dotenv
+requests
+sqlalchemy
+streamlit
+streamlit-folium

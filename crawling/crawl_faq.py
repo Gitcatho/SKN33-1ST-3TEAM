@@ -98,4 +98,4 @@ def save_csv(rows: list[dict], path: str) -> None:
 
 if __name__ == "__main__":
     rows = crawl()
-    save_csv(rows, os.path.join(DATA_DIR, "faq_data.csv"))
+    save_csv(rows, os.path.join(DATA_DIR, "faq_df.csv"))
