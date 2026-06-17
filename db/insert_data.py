@@ -33,14 +33,14 @@ def main():
     )
 
     targets = [
-        ("region",         REGION_CSV,         None),
-        ("manufacturer",   MANUFACTURER_CSV,   None),
+        ("region",          REGION_CSV,          None),
+        ("manufacturer",    MANUFACTURER_CSV,    None),
         ("defect_category", DEFECT_CATEGORY_CSV, None),
-        ("car",            CAR_CSV,             None),
-        ("service_center", SERVICE_CENTER_CSV, None),
-        ("recall",         RECALL_CSV,          {"recall_reason": ""}),
-        ("faq",            FAQ_CSV,             None),
-        ("news",           NEWS_CSV,            None),
+        ("car",             CAR_CSV,             None),
+        ("service_center",  SERVICE_CENTER_CSV,  None),
+        ("recall",          RECALL_CSV,          {"recall_reason": ""}),
+        ("faq",             FAQ_CSV,             None),
+        ("news",            NEWS_CSV,            None),
     ]
 
     with engine.begin() as conn:
@@ -55,9 +55,6 @@ def main():
             continue
 
         df = pd.read_csv(path)
-
-        if table == "manufacturer" and "country" not in df.columns:
-            df["country"] = "미분류"
 
         if fillna_map:
             for col, val in fillna_map.items():
