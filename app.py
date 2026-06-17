@@ -22,21 +22,12 @@ st.markdown("""
     border-bottom: 1px solid rgba(255,255,255,0.15);
     margin-bottom: 0.4rem;
 }
-[data-testid="stSidebarNav"] a {
-    color: rgba(255,255,255,0.8) !important;
-    border-radius: 8px;
-    padding: 0.4rem 0.8rem;
-}
-[data-testid="stSidebarNav"] a:hover {
-    background: rgba(255,107,53,0.2) !important;
-    color: white !important;
-}
-[data-testid="stSidebarNav"] a[aria-selected="true"] {
-    background: #FF6B35 !important;
-    color: white !important;
-    font-weight: 700;
-}
+[data-testid="stSidebarNav"] a { color: rgba(255,255,255,0.8) !important; border-radius: 8px; padding: 0.4rem 0.8rem; }
+[data-testid="stSidebarNav"] a:hover { background: rgba(255,107,53,0.2) !important; color: white !important; }
+[data-testid="stSidebarNav"] a[aria-selected="true"] { background: #FF6B35 !important; color: white !important; font-weight: 700; }
 [data-testid="stSidebar"] span { color: rgba(255,255,255,0.8) !important; }
+div.stButton > button { background-color: #FF6B35 !important; color: white !important; border: none !important; border-radius: 8px !important; font-weight: 600 !important; }
+div.stButton > button:hover { background-color: #e85a25 !important; }
 </style>
 """, unsafe_allow_html=True)
 
