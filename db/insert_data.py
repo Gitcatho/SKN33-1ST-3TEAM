@@ -21,6 +21,8 @@ MANUFACTURER_CSV    = DATA_DIR / 'manufacturer_df.csv'
 CAR_CSV             = DATA_DIR / 'car_df.csv'
 SERVICE_CENTER_CSV  = DATA_DIR / 'service_center_df.csv'
 RECALL_CSV          = DATA_DIR / 'recall_df.csv'
+FAQ_CSV             = DATA_DIR / 'faq_df.csv'
+NEWS_CSV            = DATA_DIR / 'news_df.csv'
 
 # ────────────────────────────────────────────────────────
 def main():
@@ -35,6 +37,8 @@ def main():
         ("car",            CAR_CSV,             None),
         ("service_center", SERVICE_CENTER_CSV, None),
         ("recall",         RECALL_CSV,          {"recall_reason": ""}),
+        ("faq",            FAQ_CSV,             None),
+        ("news",           NEWS_CSV,            None),
     ]
 
     with engine.begin() as conn:
