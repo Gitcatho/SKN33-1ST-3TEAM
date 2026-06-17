@@ -2,19 +2,22 @@ import requests
 import pandas as pd
 import time
 from dotenv import load_dotenv
+from pathlib import Path
 import os
 
 load_dotenv()
 KAKAO_API_KEY = os.getenv('KAKAO_API_KEY')
 BASE_URL = 'https://dapi.kakao.com/v2/local/search/keyword.json'
 
-df_recall = pd.read_csv(r'C:\SKN_AI\SKN33-1ST-3TEAM\data\한국교통안전공단_차종별 리콜대수_20251231.csv', encoding='cp949')
+DATA_DIR = Path(__file__).resolve().parent
+
+df_recall = pd.read_csv(DATA_DIR / '한국교통안전공단_차종별 리콜대수_20251231.csv', encoding='cp949')
 brands = df_recall['제작자'].unique().tolist()
 
-manufacturer_df = pd.read_csv(r'/data/manufacturer_df.csv', encoding='utf-8-sig')
+manufacturer_df = pd.read_csv(DATA_DIR / 'manufacturer_df.csv', encoding='utf-8-sig')
 manufacturer_map = dict(zip(manufacturer_df['name'], manufacturer_df['manufacturer_id']))
 
-region_df = pd.read_csv(r'/data/region_df.csv', encoding='utf-8-sig')
+region_df = pd.read_csv(DATA_DIR / 'region_df.csv', encoding='utf-8-sig')
 region_df['search_query'] = region_df['city'] + ' ' + region_df['district']
 region_map = dict(zip(region_df['search_query'], region_df['region_id']))
 search_queries = region_df['search_query'].tolist()
@@ -61,5 +64,5 @@ df = pd.DataFrame(rows)
 df = df.drop_duplicates(subset=['center_name', 'address'])
 print(f'\n총 {len(df)}개 수집')
 
-df.to_csv(r'C:\SKN_AI\SKN33-1ST-3TEAM\data\service_center_df.csv', index=False, encoding='utf-8-sig')
+df.to_csv(DATA_DIR / 'service_center_df.csv', index=False, encoding='utf-8-sig')
 print('CSV 저장 완료')
