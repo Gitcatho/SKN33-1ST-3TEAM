@@ -1,1 +1,10 @@
+pandas
+requests
+python-dotenv
+mysql-connector-python
+folium
+streamlit
+streamlit-folium
+plotly
+pymysql sqlalchemy pandas
 beautifulsoup4>=4.15.0

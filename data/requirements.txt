@@ -1,8 +1,0 @@
-pandas
-requests
-python-dotenv
-mysql-connector-python
-folium
-streamlit
-streamlit-folium
-plotly
