@@ -1,0 +1,13 @@
+# 자동차 리콜 조회 서비스 - 전역 테마
+# 공공 안전 서비스 톤: 딥블루 + 밝은 그레이 배경
+# 색상값은 ui.py 의 상수와 동일하게 유지하세요.
+
+[theme]
+primaryColor = "#D32F2F"            # 레드 (포인트/버튼/선택)
+backgroundColor = "#FFFFFF"         # 본문 배경
+secondaryBackgroundColor = "#F5F7FA" # 사이드바/카드 배경
+textColor = "#1A2027"               # 기본 텍스트
+font = "sans serif"
+
+[client]
+showSidebarNavigation = true
