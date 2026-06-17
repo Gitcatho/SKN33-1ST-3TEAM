@@ -1,13 +1,12 @@
-pandas
-requests
-python-dotenv
-mysql-connector-python
+beautifulsoup4>=4.15.0
 folium
+mysql-connector-python>=9.7.0
+pandas
+pandas-stubs
+plotly
+pymysql
+python-dotenv
+requests
+sqlalchemy
 streamlit
 streamlit-folium
-plotly
-pymysql sqlalchemy pandas
-beautifulsoup4>=4.15.0
-mysql-connector-python>= 9.7.0
-streamlit
-pandas-stubs

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 # ── DB 설정 ──────────────────────────────────────────────
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent.parent / '.env')
 
 DB_USER     = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
@@ -19,6 +19,7 @@ DATA_DIR = Path(__file__).resolve().parent.parent / 'data'
 REGION_CSV          = DATA_DIR / 'region_df.csv'
 MANUFACTURER_CSV    = DATA_DIR / 'manufacturer_df.csv'
 CAR_CSV             = DATA_DIR / 'car_df.csv'
+DEFECT_CATEGORY_CSV = DATA_DIR / 'defect_category.csv'
 SERVICE_CENTER_CSV  = DATA_DIR / 'service_center_df.csv'
 RECALL_CSV          = DATA_DIR / 'recall_df.csv'
 FAQ_CSV             = DATA_DIR / 'faq_df.csv'
@@ -34,6 +35,7 @@ def main():
     targets = [
         ("region",         REGION_CSV,         None),
         ("manufacturer",   MANUFACTURER_CSV,   None),
+        ("defect_category", DEFECT_CATEGORY_CSV, None),
         ("car",            CAR_CSV,             None),
         ("service_center", SERVICE_CENTER_CSV, None),
         ("recall",         RECALL_CSV,          {"recall_reason": ""}),
@@ -45,7 +47,17 @@ def main():
         conn.execute(text("SET FOREIGN_KEY_CHECKS = 0;"))
 
     for table, path, fillna_map in targets:
+        with engine.connect() as conn:
+            existing_count = conn.execute(text(f"SELECT COUNT(*) FROM {table}")).scalar()
+
+        if existing_count:
+            print(f"[SKIP] {table}: already has {existing_count} rows")
+            continue
+
         df = pd.read_csv(path)
+
+        if table == "manufacturer" and "country" not in df.columns:
+            df["country"] = "미분류"
 
         if fillna_map:
             for col, val in fillna_map.items():
