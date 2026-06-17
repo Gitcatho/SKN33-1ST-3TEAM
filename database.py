@@ -68,15 +68,10 @@ def run_query(sql: str, params: dict | None = None) -> pd.DataFrame:
 # ---------------------------------------------------------------------
 #  도메인 조회 함수
 # ---------------------------------------------------------------------
-def get_manufacturers(country: str | None = None) -> pd.DataFrame:
-    """제조사 목록. country='국산'/'수입' 으로 필터 가능."""
-    sql = "SELECT manufacturer_id, name, country FROM manufacturer"
-    params = {}
-    if country:
-        sql += " WHERE country = :country"
-        params["country"] = country
-    sql += " ORDER BY name"
-    return run_query(sql, params)
+def get_manufacturers() -> pd.DataFrame:
+    """제조사 목록."""
+    sql = "SELECT manufacturer_id, name FROM manufacturer ORDER BY name"
+    return run_query(sql)
 
 
 def get_cars(manufacturer_id: int) -> pd.DataFrame:
@@ -91,9 +86,9 @@ def get_cars(manufacturer_id: int) -> pd.DataFrame:
 
 
 def get_car_detail(car_id: int) -> pd.DataFrame:
-    """차량 1건의 상세(제조사명·국산/수입 포함)."""
+    """차량 1건의 상세(제조사명 포함)."""
     sql = """
-        SELECT c.car_id, c.model_name, m.name AS maker, m.country
+        SELECT c.car_id, c.model_name, m.name AS maker
         FROM car c
         JOIN manufacturer m ON c.manufacturer_id = m.manufacturer_id
         WHERE c.car_id = :car_id

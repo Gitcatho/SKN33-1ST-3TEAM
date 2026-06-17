@@ -24,11 +24,11 @@ DELETE FROM `region`          WHERE `region_id`      >= 9000;
 DELETE FROM `manufacturer`    WHERE `manufacturer_id`>= 9000;
 
 -- ---- 1. manufacturer (제조사) -------------------------------------
-INSERT INTO `manufacturer` (`manufacturer_id`, `name`, `country`) VALUES
-  (9001, '[DUMMY] 현대자동차',           '국산'),
-  (9002, '[DUMMY] 기아',                 '국산'),
-  (9003, '[DUMMY] BMW코리아',            '수입'),
-  (9004, '[DUMMY] 메르세데스-벤츠코리아', '수입');
+INSERT INTO `manufacturer` (`manufacturer_id`, `name`) VALUES
+  (9001, '[DUMMY] 현대자동차'),
+  (9002, '[DUMMY] 기아'),
+  (9003, '[DUMMY] BMW코리아'),
+  (9004, '[DUMMY] 메르세데스-벤츠코리아');
 
 -- ---- 2. region (지역) ---------------------------------------------
 INSERT INTO `region` (`region_id`, `city`, `district`) VALUES

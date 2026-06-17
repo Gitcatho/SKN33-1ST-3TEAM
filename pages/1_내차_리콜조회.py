@@ -1,7 +1,7 @@
 """
 내 차 리콜조회 페이지.
 
-흐름:  국산/수입 필터 -> 제조사 선택 -> 차명 선택 -> 리콜 이력 표시
+흐름:  제조사 선택 -> 차명 선택 -> 리콜 이력 표시
 """
 
 import streamlit as st
@@ -29,15 +29,8 @@ def _name_with_id(df, id_col, name_col):
 
 
 try:
-    # ---- 1. 국산/수입 필터 ----------------------------------------
-    country = st.radio(
-        "구분",
-        options=["전체", "국산", "수입"],
-        horizontal=True,
-    )
-    country_filter = None if country == "전체" else country
-
-    manufacturers = get_manufacturers(country_filter)
+    # ---- 1. 제조사 목록 -------------------------------------------
+    manufacturers = get_manufacturers()
     if manufacturers.empty:
         st.warning("제조사 데이터가 없습니다. `db/dummy_data.sql` 을 먼저 실행하세요.")
         st.stop()
@@ -70,7 +63,6 @@ try:
     detail = get_car_detail(car_id)
     model_name = car_map[car_id]
     maker = detail.iloc[0]["maker"] if not detail.empty else "-"
-    country = detail.iloc[0]["country"] if not detail.empty else "-"
 
     has_recall = not recalls.empty
     recall_cnt = len(recalls)
@@ -80,7 +72,7 @@ try:
 
     left, right = st.columns([1.1, 2])
     with left:
-        vehicle_card(model_name, maker, country)
+        vehicle_card(model_name, maker)
     with right:
         with st.container(border=True):
             status = badge("리콜 대상", "danger") if has_recall else badge("리콜 이력 없음", "success")

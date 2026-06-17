@@ -79,7 +79,7 @@ def cta_banner(title: str, subtitle: str = "") -> None:
     )
 
 
-def vehicle_card(model_name: str, maker: str, country: str) -> None:
+def vehicle_card(model_name: str, maker: str) -> None:
     """차량 식별 패널 (자동차365 스타일). 번호판 자리에는 차명을 표기."""
     st.html(
         f"""
@@ -88,11 +88,10 @@ def vehicle_card(model_name: str, maker: str, country: str) -> None:
             <div style="font-size:.82rem;opacity:.85;margin-bottom:.6rem;">🚗 차량 정보</div>
             <span style="display:inline-block;background:rgba(255,255,255,.18);
                          padding:2px 12px;border-radius:14px;font-size:.8rem;
-                         font-weight:600;">{country}</span>
-            <div style="margin:.7rem 0 .2rem;font-size:.85rem;opacity:.85;">{maker}</div>
+                         font-weight:600;">{maker}</span>
             <div style="background:#fff;color:{DARK};border:3px solid #FFC107;
                         border-radius:10px;padding:.7rem;text-align:center;
-                        font-weight:800;font-size:1.25rem;margin-top:.4rem;">
+                        font-weight:800;font-size:1.25rem;margin-top:.9rem;">
                 {model_name}
             </div>
         </div>
