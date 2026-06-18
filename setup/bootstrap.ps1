@@ -75,8 +75,13 @@ function Test-PythonRunner {
         return $false
     }
 
-    $output = & $Command @PrefixArguments -c "import sys; print('PYTHON_OK:' + sys.executable); raise SystemExit(0 if sys.version_info >= (3, 10) else 1)" 2>$null
-    return ($LASTEXITCODE -eq 0 -and ($output -join "`n") -match "PYTHON_OK:")
+    try {
+        $output = & $Command @PrefixArguments -c "import sys; print('PYTHON_OK:' + sys.executable); raise SystemExit(0 if sys.version_info >= (3, 10) else 1)" 2>$null
+        return ($LASTEXITCODE -eq 0 -and ($output -join "`n") -match "PYTHON_OK:")
+    }
+    catch {
+        return $false
+    }
 }
 
 function Resolve-PythonRunner {
@@ -103,7 +108,7 @@ function Resolve-PythonRunner {
         }
     }
 
-    throw "Python 3.10 or newer was not found. Install Python from https://www.python.org/downloads/ and enable 'Add python.exe to PATH', then run this setup again."
+    throw "Python 3.10 or newer was not found. Install Python from https://www.python.org/downloads/ and enable 'Add python.exe to PATH', or run setup\bootstrap.ps1 with -PythonCommand pointing to a valid python.exe."
 }
 
 function Get-ExistingVenvPython {

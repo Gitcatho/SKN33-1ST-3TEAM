@@ -10,6 +10,12 @@ run_setup.bat
 
 Before running it, install Python 3.10 or newer and enable `Add python.exe to PATH`.
 
+If Windows blocks the `python` command or it is not on PATH, double-click this file instead and paste the full path to `python.exe`:
+
+```text
+run_setup_with_python_path.bat
+```
+
 You can also run the PowerShell script directly:
 
 ```powershell
