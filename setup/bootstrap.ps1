@@ -106,6 +106,23 @@ function Resolve-PythonRunner {
     throw "Python 3.10 or newer was not found. Install Python from https://www.python.org/downloads/ and enable 'Add python.exe to PATH', then run this setup again."
 }
 
+function Get-ExistingVenvPython {
+    param([string]$RootPath)
+
+    $venvCandidates = @(
+        (Join-Path $RootPath ".venv\Scripts\python.exe"),
+        (Join-Path $RootPath ".venv\python.exe")
+    )
+
+    foreach ($candidate in $venvCandidates) {
+        if (Test-Path $candidate) {
+            return $candidate
+        }
+    }
+
+    return $null
+}
+
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectRoot = (Resolve-Path (Join-Path $ScriptDir "..")).Path
 Set-Location $ProjectRoot
@@ -114,25 +131,23 @@ Write-Step "Project root"
 Write-Host $ProjectRoot
 
 Write-Step "Create virtual environment"
-$PythonRunner = Resolve-PythonRunner $PythonCommand
-Write-Host "Using Python command: $($PythonRunner.Command) $($PythonRunner.Args -join ' ')"
+$VenvPython = Get-ExistingVenvPython $ProjectRoot
 
-if (-not (Test-Path ".venv")) {
+if ($VenvPython) {
+    Write-Host "Using existing virtual environment Python: $VenvPython"
+}
+elseif (-not (Test-Path ".venv")) {
+    $PythonRunner = Resolve-PythonRunner $PythonCommand
+    Write-Host "Using Python command: $($PythonRunner.Command) $($PythonRunner.Args -join ' ')"
     Invoke-Checked $PythonRunner.Command ($PythonRunner.Args + @("-m", "venv", ".venv")) "Failed to create .venv"
+    $VenvPython = Get-ExistingVenvPython $ProjectRoot
 }
 else {
-    Write-Host ".venv already exists. Skipping creation."
+    throw ".venv exists, but no Python executable was found inside it. Delete the incomplete .venv folder and run setup again."
 }
 
-$VenvPython = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
-if (-not (Test-Path $VenvPython)) {
-    $CondaStylePython = Join-Path $ProjectRoot ".venv\python.exe"
-    if (Test-Path $CondaStylePython) {
-        $VenvPython = $CondaStylePython
-    }
-    else {
-        throw "Virtual environment python was not found. Delete the incomplete .venv folder and run setup again."
-    }
+if (-not $VenvPython) {
+    throw "Virtual environment python was not found after creation."
 }
 
 Write-Step "Install Python packages"
