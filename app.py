@@ -6,7 +6,7 @@ st.markdown("""
 <style>
 [data-testid="stSidebar"] { background: #1B2A4A !important; }
 [data-testid="stSidebarNav"]::before {
-    content: "자동차 리콜 서비스";
+    content: "📡 Recall Radar";
     display: block;
     font-size: 1.1rem;
     font-weight: 700;

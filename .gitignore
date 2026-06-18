@@ -16,7 +16,7 @@ __pycache__/
 #파이참 설정 
 .idea
 
-# dotenv 무시 설정
-.dotenv
+# env 무시 설정
+.env
 
 .claude

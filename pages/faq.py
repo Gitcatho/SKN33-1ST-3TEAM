@@ -2,6 +2,11 @@ import streamlit as st
 import mysql.connector
 import pandas as pd
 import re
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 st.markdown("""
 <style>
@@ -35,7 +40,11 @@ def highlight_keyword(text, keyword):
 
 def get_conn():
     return mysql.connector.connect(
-        host="localhost", user="skn_ai", password="1234", database="recallcardb"
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME"),
+        port=int(os.getenv("DB_PORT", 3306)),
     )
 
 @st.cache_data
