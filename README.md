@@ -130,6 +130,8 @@ https://car.withnews.kr/newcar/us-auto-recall-trade-pressure
 - 키워드 강조 기능 제공
 ## 실행방법
 
+SET_README.md 참고
+
 ## 수행 화면 캡처
 <img src="data/images/home.png" >
 
