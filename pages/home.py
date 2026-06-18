@@ -42,7 +42,7 @@ _, col_c, _ = st.columns([1, 4, 1])
 with col_c:
     st.markdown("""
     <div class="hero">
-        <div class="hero-title">자동차 리콜 서비스</div>
+        <div class="hero-title">📡 Recall Radar</div>
         <div class="hero-sub">내 차의 리콜 여부를 확인하고, 가까운 서비스센터를 찾아보세요</div>
     </div>
     """, unsafe_allow_html=True)
