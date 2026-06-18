@@ -1,6 +1,16 @@
 # Setup Automation
 
-Run this after cloning the repository on Windows PowerShell.
+Run this after cloning the repository on Windows.
+
+The easiest way is to double-click:
+
+```text
+run_setup.bat
+```
+
+Before running it, install Python 3.10 or newer and enable `Add python.exe to PATH`.
+
+You can also run the PowerShell script directly:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass

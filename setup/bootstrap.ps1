@@ -53,6 +53,76 @@ function Escape-SqlString {
     return $Value.Replace("'", "''")
 }
 
+function Invoke-Checked {
+    param(
+        [string]$Command,
+        [string[]]$Arguments,
+        [string]$FailureMessage
+    )
+    & $Command @Arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "$FailureMessage (exit code: $LASTEXITCODE)"
+    }
+}
+
+function Test-PythonRunner {
+    param(
+        [string]$Command,
+        [string[]]$PrefixArguments
+    )
+    $cmdInfo = Get-Command $Command -ErrorAction SilentlyContinue
+    if (-not $cmdInfo) {
+        return $false
+    }
+
+    $output = & $Command @PrefixArguments -c "import sys; print('PYTHON_OK:' + sys.executable); raise SystemExit(0 if sys.version_info >= (3, 10) else 1)" 2>$null
+    return ($LASTEXITCODE -eq 0 -and ($output -join "`n") -match "PYTHON_OK:")
+}
+
+function Resolve-PythonRunner {
+    param([string]$RequestedCommand)
+
+    $candidates = @()
+    if (-not [string]::IsNullOrWhiteSpace($RequestedCommand)) {
+        $candidates += @{ Command = $RequestedCommand; Args = @() }
+    }
+    $candidates += @{ Command = "py"; Args = @("-3") }
+    $candidates += @{ Command = "python"; Args = @() }
+    $candidates += @{ Command = "python3"; Args = @() }
+
+    $seen = @{}
+    foreach ($candidate in $candidates) {
+        $key = "$($candidate.Command) $($candidate.Args -join ' ')"
+        if ($seen.ContainsKey($key)) {
+            continue
+        }
+        $seen[$key] = $true
+
+        if (Test-PythonRunner $candidate.Command $candidate.Args) {
+            return $candidate
+        }
+    }
+
+    throw "Python 3.10 or newer was not found. Install Python from https://www.python.org/downloads/ and enable 'Add python.exe to PATH', then run this setup again."
+}
+
+function Get-ExistingVenvPython {
+    param([string]$RootPath)
+
+    $venvCandidates = @(
+        (Join-Path $RootPath ".venv\Scripts\python.exe"),
+        (Join-Path $RootPath ".venv\python.exe")
+    )
+
+    foreach ($candidate in $venvCandidates) {
+        if (Test-Path $candidate) {
+            return $candidate
+        }
+    }
+
+    return $null
+}
+
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectRoot = (Resolve-Path (Join-Path $ScriptDir "..")).Path
 Set-Location $ProjectRoot
@@ -61,27 +131,28 @@ Write-Step "Project root"
 Write-Host $ProjectRoot
 
 Write-Step "Create virtual environment"
-if (-not (Test-Path ".venv")) {
-    & $PythonCommand -m venv .venv
+$VenvPython = Get-ExistingVenvPython $ProjectRoot
+
+if ($VenvPython) {
+    Write-Host "Using existing virtual environment Python: $VenvPython"
+}
+elseif (-not (Test-Path ".venv")) {
+    $PythonRunner = Resolve-PythonRunner $PythonCommand
+    Write-Host "Using Python command: $($PythonRunner.Command) $($PythonRunner.Args -join ' ')"
+    Invoke-Checked $PythonRunner.Command ($PythonRunner.Args + @("-m", "venv", ".venv")) "Failed to create .venv"
+    $VenvPython = Get-ExistingVenvPython $ProjectRoot
 }
 else {
-    Write-Host ".venv already exists. Skipping creation."
+    throw ".venv exists, but no Python executable was found inside it. Delete the incomplete .venv folder and run setup again."
 }
 
-$VenvPython = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
-if (-not (Test-Path $VenvPython)) {
-    $CondaStylePython = Join-Path $ProjectRoot ".venv\python.exe"
-    if (Test-Path $CondaStylePython) {
-        $VenvPython = $CondaStylePython
-    }
-    else {
-        throw "Virtual environment python was not found: $VenvPython"
-    }
+if (-not $VenvPython) {
+    throw "Virtual environment python was not found after creation."
 }
 
 Write-Step "Install Python packages"
-& $VenvPython -m pip install --upgrade pip
-& $VenvPython -m pip install -r requirements.txt
+Invoke-Checked $VenvPython @("-m", "pip", "install", "--upgrade", "pip") "Failed to upgrade pip"
+Invoke-Checked $VenvPython @("-m", "pip", "install", "-r", "requirements.txt") "Failed to install Python packages"
 
 Write-Step "Create or check .env"
 $EnvPath = Join-Path $ProjectRoot ".env"
