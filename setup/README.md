@@ -16,6 +16,36 @@ If Windows blocks the `python` command or it is not on PATH, double-click this f
 run_setup_with_python_path.bat
 ```
 
+## Creating `.venv` Manually
+
+If setup stops because `.venv` does not exist, create it manually first.
+
+Check whether Python is available:
+
+```powershell
+python --version
+```
+
+If this prints a real Python version, create `.venv`:
+
+```powershell
+python -m venv .venv
+```
+
+If `python` is blocked or not found, use the full path to `python.exe`:
+
+```powershell
+"C:\Users\your-name\AppData\Local\Programs\Python\Python312\python.exe" -m venv .venv
+```
+
+After `.venv` is created, run:
+
+```powershell
+.\run_setup.bat
+```
+
+The setup script will detect `.venv\Scripts\python.exe` automatically.
+
 You can also run the PowerShell script directly:
 
 ```powershell
