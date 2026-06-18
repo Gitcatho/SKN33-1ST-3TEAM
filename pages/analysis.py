@@ -224,7 +224,9 @@ if len(defect_filtered) > 0:
     st.markdown('<div class="section-title">브랜드별 결함 유형 현황</div>', unsafe_allow_html=True)
     st.markdown('<div class="section-caption">브랜드를 선택하면 해당 제조사의 결함 유형별 리콜 건수를 확인할 수 있습니다</div>', unsafe_allow_html=True)
 
-    defect_mfr_list = sorted(defect_filtered['manufacturer'].unique().tolist())
+    defect_mfr_list = sorted(
+        defect_filtered.groupby('manufacturer').filter(lambda x: len(x) >= 2)['manufacturer'].unique().tolist()
+    )
     selected_defect_mfr = st.selectbox("🏭 브랜드 선택", defect_mfr_list, key="defect_mfr")
 
     mfr_defect = defect_filtered[defect_filtered['manufacturer'] == selected_defect_mfr]
@@ -234,14 +236,15 @@ if len(defect_filtered) > 0:
         st.info("해당 브랜드의 결함 데이터가 없습니다.")
     else:
         chart_height = max(250, min(400, len(mfr_defect_group) * 50))
-        bar_width = max(0.1, min(0.4, 0.4 / max(len(mfr_defect_group), 1)))
         fig6 = px.bar(mfr_defect_group, x='defect_group', y='건수', text='건수',
                       color='건수', color_continuous_scale=[[0, LIGHT_PRIMARY], [1, PRIMARY]])
         fig6.update_traces(texttemplate='%{text:,}회', textposition='outside',
-                           marker_line_width=0, width=bar_width)
+                           marker_line_width=0, width=0.3)
         fig6.update_layout(**LAYOUT, height=chart_height, showlegend=False, coloraxis_showscale=False,
                            bargap=0.5,
-                           xaxis=dict(showgrid=False, title=''),
+                           xaxis=dict(showgrid=False, title='',
+                                      range=[-0.5 + len(mfr_defect_group) * -0.3,
+                                             len(mfr_defect_group) - 0.5 + len(mfr_defect_group) * 0.3]),
                            yaxis=dict(showgrid=True, gridcolor='#f0f0f0', title='',
                                       range=[0, mfr_defect_group['건수'].max() * 1.3]))
         st.plotly_chart(fig6, use_container_width=True)
