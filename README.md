@@ -69,6 +69,7 @@
     <img src="https://img.shields.io/badge/folium-77B829?style=flat-square"/>
     <img src="https://img.shields.io/badge/markdown-000000?style=flat-square&logo=markdown&logoColor=white"/>
 </p>
+
 ### 프로젝트 필요성(배경)
 
 자동차 리콜은 차량 안전과 직결되는 중요한 정보이지만, 
