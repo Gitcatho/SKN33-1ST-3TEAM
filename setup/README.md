@@ -16,6 +16,17 @@ If Windows blocks the `python` command or it is not on PATH, double-click this f
 run_setup_with_python_path.bat
 ```
 
+## Using an Existing Conda Environment
+
+If you already have a conda environment, activate it first and run setup from that terminal.
+
+```bat
+conda activate pystudy_env
+run_setup
+```
+
+In this case, setup uses the active conda Python and skips creating `.venv`.
+
 ## Creating `.venv` Manually
 
 If setup stops because `.venv` does not exist, create it manually first.

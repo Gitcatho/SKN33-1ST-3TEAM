@@ -128,6 +128,19 @@ function Get-ExistingVenvPython {
     return $null
 }
 
+function Get-ActiveCondaPython {
+    if ([string]::IsNullOrWhiteSpace($env:CONDA_PREFIX)) {
+        return $null
+    }
+
+    $candidate = Join-Path $env:CONDA_PREFIX "python.exe"
+    if (Test-Path $candidate) {
+        return $candidate
+    }
+
+    return $null
+}
+
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectRoot = (Resolve-Path (Join-Path $ScriptDir "..")).Path
 Set-Location $ProjectRoot
@@ -137,9 +150,14 @@ Write-Host $ProjectRoot
 
 Write-Step "Create virtual environment"
 $VenvPython = Get-ExistingVenvPython $ProjectRoot
+$ActiveCondaPython = Get-ActiveCondaPython
 
 if ($VenvPython) {
     Write-Host "Using existing virtual environment Python: $VenvPython"
+}
+elseif ($ActiveCondaPython) {
+    $VenvPython = $ActiveCondaPython
+    Write-Host "Using active conda environment Python: $VenvPython"
 }
 elseif (-not (Test-Path ".venv")) {
     $PythonRunner = Resolve-PythonRunner $PythonCommand
